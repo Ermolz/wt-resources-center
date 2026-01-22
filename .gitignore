@@ -27,7 +27,10 @@ lerna-debug.log*
 
 # Editor
 .vscode/
-.idea/
+.idea/*
+!.idea/runConfigurations/
+!.idea/runConfigurations/*.xml
+!.idea/runConfigurations/*.md
 *.swp
 *.swo
 *~
