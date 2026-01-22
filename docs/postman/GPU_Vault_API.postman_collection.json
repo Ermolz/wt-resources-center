@@ -1,0 +1,1305 @@
+{
+  "info": {
+    "name": "GPU Vault API",
+    "description": "Complete REST and GraphQL API collection for GPU Vault application with comprehensive tests",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_postman_id": "gpu-vault-api-collection",
+    "version": "2.0.0"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "gpuId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "chipsetId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "vendorId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "tagId1",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "tagId2",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Register",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test(\"Response has success field\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('success');",
+                  "    pm.expect(jsonData.success).to.be.true;",
+                  "});",
+                  "",
+                  "pm.test(\"Response has meta field\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('meta');",
+                  "    pm.expect(jsonData.meta).to.have.property('timestamp');",
+                  "});",
+                  "",
+                  "pm.test(\"Response time is less than 500ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(500);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"testuser@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "register"]
+            },
+            "description": "Register a new user account. Check server console for confirmation token in development mode."
+          }
+        },
+        {
+          "name": "Confirm Email",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response has success field\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('success');",
+                  "    pm.expect(jsonData.success).to.be.true;",
+                  "});",
+                  "",
+                  "pm.test(\"Response time is less than 500ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(500);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/confirm/:token",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "confirm", ":token"],
+              "variable": [
+                {
+                  "key": "token",
+                  "value": "confirmation-token-here",
+                  "description": "Token from server console after registration"
+                }
+              ]
+            },
+            "description": "Confirm user email address using token from registration email."
+          }
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response has success field\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('success');",
+                  "    pm.expect(jsonData.success).to.be.true;",
+                  "});",
+                  "",
+                  "pm.test(\"Response has data with token and user\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('data');",
+                  "    pm.expect(jsonData.data).to.have.property('token');",
+                  "    pm.expect(jsonData.data).to.have.property('user');",
+                  "    pm.expect(jsonData.data.user).to.have.property('email');",
+                  "    pm.expect(jsonData.data.user).to.have.property('role');",
+                  "});",
+                  "",
+                  "pm.test(\"Token is saved to collection variable\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    if (jsonData.data && jsonData.data.token) {",
+                  "        pm.collectionVariables.set('token', jsonData.data.token);",
+                  "        pm.expect(pm.collectionVariables.get('token')).to.not.be.empty;",
+                  "    }",
+                  "});",
+                  "",
+                  "pm.test(\"Response time is less than 500ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(500);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@gpuvault.com\",\n  \"password\": \"admin123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "login"]
+            },
+            "description": "Login with email and password. Token is automatically saved to collection variable."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reference Data",
+      "item": [
+        {
+          "name": "Get Chipsets",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response has success field\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('success');",
+                  "    pm.expect(jsonData.success).to.be.true;",
+                  "});",
+                  "",
+                  "pm.test(\"Response has data array\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('data');",
+                  "    pm.expect(jsonData.data).to.be.an('array');",
+                  "    pm.expect(jsonData.data.length).to.be.above(0);",
+                  "});",
+                  "",
+                  "pm.test(\"Chipset has required fields\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    if (jsonData.data && jsonData.data.length > 0) {",
+                  "        var chipset = jsonData.data[0];",
+                  "        pm.expect(chipset).to.have.property('id');",
+                  "        pm.expect(chipset).to.have.property('name');",
+                  "        pm.expect(chipset).to.have.property('manufacturer');",
+                  "        ",
+                  "        pm.collectionVariables.set('chipsetId', chipset.id);",
+                  "    }",
+                  "});",
+                  "",
+                  "pm.test(\"Response time is less than 500ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(500);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/chipsets",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "chipsets"]
+            },
+            "description": "Get all available chipsets. First chipset ID is automatically saved to collection variable."
+          }
+        },
+        {
+          "name": "Get Vendors",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response has success field\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('success');",
+                  "    pm.expect(jsonData.success).to.be.true;",
+                  "});",
+                  "",
+                  "pm.test(\"Response has data array\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('data');",
+                  "    pm.expect(jsonData.data).to.be.an('array');",
+                  "    pm.expect(jsonData.data.length).to.be.above(0);",
+                  "});",
+                  "",
+                  "pm.test(\"Vendor has required fields\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    if (jsonData.data && jsonData.data.length > 0) {",
+                  "        var vendor = jsonData.data[0];",
+                  "        pm.expect(vendor).to.have.property('id');",
+                  "        pm.expect(vendor).to.have.property('name');",
+                  "        ",
+                  "        pm.collectionVariables.set('vendorId', vendor.id);",
+                  "    }",
+                  "});",
+                  "",
+                  "pm.test(\"Response time is less than 500ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(500);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/vendors",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "vendors"]
+            },
+            "description": "Get all available vendors. First vendor ID is automatically saved to collection variable."
+          }
+        },
+        {
+          "name": "Get Tags",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response has success field\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('success');",
+                  "    pm.expect(jsonData.success).to.be.true;",
+                  "});",
+                  "",
+                  "pm.test(\"Response has data array\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('data');",
+                  "    pm.expect(jsonData.data).to.be.an('array');",
+                  "    pm.expect(jsonData.data.length).to.be.above(0);",
+                  "});",
+                  "",
+                  "pm.test(\"Tag has required fields\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    if (jsonData.data && jsonData.data.length > 0) {",
+                  "        var tag1 = jsonData.data[0];",
+                  "        pm.expect(tag1).to.have.property('id');",
+                  "        pm.expect(tag1).to.have.property('name');",
+                  "        pm.collectionVariables.set('tagId1', tag1.id);",
+                  "        ",
+                  "        if (jsonData.data.length > 1) {",
+                  "            var tag2 = jsonData.data[1];",
+                  "            pm.collectionVariables.set('tagId2', tag2.id);",
+                  "        }",
+                  "    }",
+                  "});",
+                  "",
+                  "pm.test(\"Response time is less than 500ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(500);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/tags",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "tags"]
+            },
+            "description": "Get all available tags. First two tag IDs are automatically saved to collection variables."
+          }
+        }
+      ]
+    },
+    {
+      "name": "GPUs",
+      "item": [
+        {
+          "name": "Get All GPUs",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response has success field\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('success');",
+                  "    pm.expect(jsonData.success).to.be.true;",
+                  "});",
+                  "",
+                  "pm.test(\"Response has data array\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('data');",
+                  "    pm.expect(jsonData.data).to.be.an('array');",
+                  "});",
+                  "",
+                  "pm.test(\"Response has pagination meta\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('meta');",
+                  "    pm.expect(jsonData.meta).to.have.property('page');",
+                  "    pm.expect(jsonData.meta).to.have.property('size');",
+                  "    pm.expect(jsonData.meta).to.have.property('totalElements');",
+                  "    pm.expect(jsonData.meta).to.have.property('totalPages');",
+                  "});",
+                  "",
+                  "pm.test(\"GPU has required fields\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    if (jsonData.data && jsonData.data.length > 0) {",
+                  "        var gpu = jsonData.data[0];",
+                  "        pm.expect(gpu).to.have.property('id');",
+                  "        pm.expect(gpu).to.have.property('name');",
+                  "        pm.expect(gpu).to.have.property('memoryGB');",
+                  "        pm.expect(gpu).to.have.property('price');",
+                  "        pm.expect(gpu).to.have.property('status');",
+                  "        pm.expect(gpu).to.have.property('chipset');",
+                  "        pm.expect(gpu).to.have.property('vendor');",
+                  "        ",
+                  "        pm.collectionVariables.set('gpuId', gpu.id);",
+                  "    }",
+                  "});",
+                  "",
+                  "pm.test(\"Response time is less than 1000ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(1000);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/gpus?minMemory=8&maxPrice=500&status=AVAILABLE&page=1&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "gpus"],
+              "query": [
+                {
+                  "key": "minMemory",
+                  "value": "8",
+                  "description": "Minimum memory in GB"
+                },
+                {
+                  "key": "maxPrice",
+                  "value": "500",
+                  "description": "Maximum price"
+                },
+                {
+                  "key": "status",
+                  "value": "AVAILABLE",
+                  "description": "GPU status: AVAILABLE, DISCONTINUED, COMING_SOON"
+                },
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number"
+                },
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Items per page"
+                }
+              ]
+            },
+            "description": "Get all GPUs with optional filters. Supports pagination. First GPU ID is automatically saved."
+          }
+        },
+        {
+          "name": "Get GPU by ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response has success field\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('success');",
+                  "    pm.expect(jsonData.success).to.be.true;",
+                  "});",
+                  "",
+                  "pm.test(\"Response has data object\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('data');",
+                  "    pm.expect(jsonData.data).to.be.an('object');",
+                  "});",
+                  "",
+                  "pm.test(\"GPU has all required fields\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    if (jsonData.data) {",
+                  "        var gpu = jsonData.data;",
+                  "        pm.expect(gpu).to.have.property('id');",
+                  "        pm.expect(gpu).to.have.property('name');",
+                  "        pm.expect(gpu).to.have.property('memoryGB');",
+                  "        pm.expect(gpu).to.have.property('memoryType');",
+                  "        pm.expect(gpu).to.have.property('tdp');",
+                  "        pm.expect(gpu).to.have.property('price');",
+                  "        pm.expect(gpu).to.have.property('status');",
+                  "        pm.expect(gpu).to.have.property('chipset');",
+                  "        pm.expect(gpu).to.have.property('vendor');",
+                  "        pm.expect(gpu).to.have.property('tags');",
+                  "    }",
+                  "});",
+                  "",
+                  "pm.test(\"Response time is less than 500ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(500);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/gpus/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "gpus", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{gpuId}}",
+                  "description": "GPU UUID"
+                }
+              ]
+            },
+            "description": "Get a specific GPU by ID. Uses gpuId from collection variables."
+          }
+        },
+        {
+          "name": "Create GPU",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "// Ensure we have required IDs",
+                  "if (!pm.collectionVariables.get('chipsetId')) {",
+                  "    console.log('Warning: chipsetId not set. Run Get Chipsets first.');",
+                  "}",
+                  "if (!pm.collectionVariables.get('vendorId')) {",
+                  "    console.log('Warning: vendorId not set. Run Get Vendors first.');",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test(\"Response has success field\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('success');",
+                  "    pm.expect(jsonData.success).to.be.true;",
+                  "});",
+                  "",
+                  "pm.test(\"Response has data with created GPU\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('data');",
+                  "    pm.expect(jsonData.data).to.have.property('id');",
+                  "    pm.expect(jsonData.data).to.have.property('name');",
+                  "    ",
+                  "    pm.collectionVariables.set('gpuId', jsonData.data.id);",
+                  "});",
+                  "",
+                  "pm.test(\"Created GPU has all required fields\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    if (jsonData.data) {",
+                  "        var gpu = jsonData.data;",
+                  "        pm.expect(gpu).to.have.property('name');",
+                  "        pm.expect(gpu).to.have.property('memoryGB');",
+                  "        pm.expect(gpu).to.have.property('price');",
+                  "        pm.expect(gpu).to.have.property('chipset');",
+                  "        pm.expect(gpu).to.have.property('vendor');",
+                  "    }",
+                  "});",
+                  "",
+                  "pm.test(\"Response time is less than 1000ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(1000);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"RTX 4090 Test\",\n  \"chipsetId\": \"{{chipsetId}}\",\n  \"vendorId\": \"{{vendorId}}\",\n  \"memoryGB\": 24,\n  \"memoryType\": \"GDDR6X\",\n  \"tdp\": 450,\n  \"price\": 1599.99,\n  \"status\": \"AVAILABLE\",\n  \"description\": \"High-end GPU for testing\",\n  \"tagIds\": [\"{{tagId1}}\", \"{{tagId2}}\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/gpus",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "gpus"]
+            },
+            "description": "Create a new GPU (Admin only). Requires authentication token. Created GPU ID is automatically saved."
+          }
+        },
+        {
+          "name": "Update GPU",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response has success field\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('success');",
+                  "    pm.expect(jsonData.success).to.be.true;",
+                  "});",
+                  "",
+                  "pm.test(\"Response has updated GPU data\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('data');",
+                  "    pm.expect(jsonData.data).to.have.property('id');",
+                  "});",
+                  "",
+                  "pm.test(\"Price was updated\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    if (jsonData.data) {",
+                  "        pm.expect(jsonData.data).to.have.property('price');",
+                  "        pm.expect(jsonData.data.price).to.equal(1499.99);",
+                  "    }",
+                  "});",
+                  "",
+                  "pm.test(\"Response time is less than 1000ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(1000);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"price\": 1499.99\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/gpus/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "gpus", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{gpuId}}",
+                  "description": "GPU UUID"
+                }
+              ]
+            },
+            "description": "Update an existing GPU (Admin only). All fields are optional. Uses gpuId from collection variables."
+          }
+        },
+        {
+          "name": "Toggle GPU Status",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response has success field\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('success');",
+                  "    pm.expect(jsonData.success).to.be.true;",
+                  "});",
+                  "",
+                  "pm.test(\"Response has GPU with updated status\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('data');",
+                  "    pm.expect(jsonData.data).to.have.property('status');",
+                  "    pm.expect(['AVAILABLE', 'DISCONTINUED', 'COMING_SOON']).to.include(jsonData.data.status);",
+                  "});",
+                  "",
+                  "pm.test(\"Response time is less than 500ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(500);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/gpus/:id/toggle",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "gpus", ":id", "toggle"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{gpuId}}",
+                  "description": "GPU UUID"
+                }
+              ]
+            },
+            "description": "Toggle GPU status between AVAILABLE, DISCONTINUED, and COMING_SOON (Admin only)."
+          }
+        },
+        {
+          "name": "Delete GPU",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response has success field\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('success');",
+                  "    pm.expect(jsonData.success).to.be.true;",
+                  "});",
+                  "",
+                  "pm.test(\"Response time is less than 500ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(500);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/gpus/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "gpus", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{gpuId}}",
+                  "description": "GPU UUID"
+                }
+              ]
+            },
+            "description": "Delete a GPU (Admin only). Uses gpuId from collection variables."
+          }
+        }
+      ]
+    },
+    {
+      "name": "GraphQL",
+      "item": [
+        {
+          "name": "Get GPUs Query",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response has data field\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('data');",
+                  "});",
+                  "",
+                  "pm.test(\"Response has getGpus array\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.data).to.have.property('getGpus');",
+                  "    pm.expect(jsonData.data.getGpus).to.be.an('array');",
+                  "});",
+                  "",
+                  "pm.test(\"GPU has required fields\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    if (jsonData.data && jsonData.data.getGpus && jsonData.data.getGpus.length > 0) {",
+                  "        var gpu = jsonData.data.getGpus[0];",
+                  "        pm.expect(gpu).to.have.property('id');",
+                  "        pm.expect(gpu).to.have.property('name');",
+                  "        pm.expect(gpu).to.have.property('chipset');",
+                  "        pm.expect(gpu).to.have.property('vendor');",
+                  "    }",
+                  "});",
+                  "",
+                  "pm.test(\"Response time is less than 1000ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(1000);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"query GetGpus($filters: GpuFilters) {\\n  getGpus(filters: $filters) {\\n    id\\n    name\\n    chipset {\\n      id\\n      name\\n      manufacturer\\n    }\\n    vendor {\\n      id\\n      name\\n    }\\n    memoryGB\\n    memoryType\\n    tdp\\n    price\\n    status\\n    description\\n    tags {\\n      id\\n      name\\n    }\\n  }\\n}\",\n  \"variables\": {\n    \"filters\": {\n      \"minMemory\": 8,\n      \"maxPrice\": 500,\n      \"status\": \"AVAILABLE\"\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": ["{{baseUrl}}"],
+              "path": ["graphql"]
+            },
+            "description": "GraphQL query to get filtered list of GPUs with all related data."
+          }
+        },
+        {
+          "name": "Get GPU by ID Query",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response has data field\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('data');",
+                  "});",
+                  "",
+                  "pm.test(\"Response has getGpu object\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.data).to.have.property('getGpu');",
+                  "});",
+                  "",
+                  "pm.test(\"GPU has all required fields\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    if (jsonData.data && jsonData.data.getGpu) {",
+                  "        var gpu = jsonData.data.getGpu;",
+                  "        pm.expect(gpu).to.have.property('id');",
+                  "        pm.expect(gpu).to.have.property('name');",
+                  "        pm.expect(gpu).to.have.property('chipset');",
+                  "        pm.expect(gpu).to.have.property('vendor');",
+                  "        pm.expect(gpu).to.have.property('tags');",
+                  "    }",
+                  "});",
+                  "",
+                  "pm.test(\"Response time is less than 500ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(500);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"query GetGpu($id: ID!) {\\n  getGpu(id: $id) {\\n    id\\n    name\\n    chipset {\\n      id\\n      name\\n      manufacturer\\n    }\\n    vendor {\\n      id\\n      name\\n    }\\n    memoryGB\\n    memoryType\\n    tdp\\n    price\\n    status\\n    description\\n    tags {\\n      id\\n      name\\n    }\\n  }\\n}\",\n  \"variables\": {\n    \"id\": \"{{gpuId}}\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": ["{{baseUrl}}"],
+              "path": ["graphql"]
+            },
+            "description": "GraphQL query to get a specific GPU by ID with all related data."
+          }
+        },
+        {
+          "name": "Get Reference Data Query",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response has data field\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('data');",
+                  "});",
+                  "",
+                  "pm.test(\"Response has all reference data\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.data).to.have.property('getChipsets');",
+                  "    pm.expect(jsonData.data).to.have.property('getVendors');",
+                  "    pm.expect(jsonData.data).to.have.property('getTags');",
+                  "});",
+                  "",
+                  "pm.test(\"All reference data are arrays\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.data.getChipsets).to.be.an('array');",
+                  "    pm.expect(jsonData.data.getVendors).to.be.an('array');",
+                  "    pm.expect(jsonData.data.getTags).to.be.an('array');",
+                  "});",
+                  "",
+                  "pm.test(\"Response time is less than 500ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(500);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"query GetReferenceData {\\n  getChipsets {\\n    id\\n    name\\n    manufacturer\\n  }\\n  getVendors {\\n    id\\n    name\\n  }\\n  getTags {\\n    id\\n    name\\n  }\\n}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": ["{{baseUrl}}"],
+              "path": ["graphql"]
+            },
+            "description": "GraphQL query to get all reference data (chipsets, vendors, tags) in a single request."
+          }
+        },
+        {
+          "name": "Create GPU Mutation",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "// Ensure we have required IDs",
+                  "if (!pm.collectionVariables.get('chipsetId')) {",
+                  "    console.log('Warning: chipsetId not set. Run Get Chipsets first.');",
+                  "}",
+                  "if (!pm.collectionVariables.get('vendorId')) {",
+                  "    console.log('Warning: vendorId not set. Run Get Vendors first.');",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response has data field\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('data');",
+                  "});",
+                  "",
+                  "pm.test(\"Response has createGpu object\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.data).to.have.property('createGpu');",
+                  "});",
+                  "",
+                  "pm.test(\"Created GPU has required fields\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    if (jsonData.data && jsonData.data.createGpu) {",
+                  "        var gpu = jsonData.data.createGpu;",
+                  "        pm.expect(gpu).to.have.property('id');",
+                  "        pm.expect(gpu).to.have.property('name');",
+                  "        pm.expect(gpu).to.have.property('status');",
+                  "        ",
+                  "        pm.collectionVariables.set('gpuId', gpu.id);",
+                  "    }",
+                  "});",
+                  "",
+                  "pm.test(\"Response time is less than 1000ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(1000);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"mutation CreateGpu($input: CreateGpuInput!) {\\n  createGpu(input: $input) {\\n    id\\n    name\\n    status\\n    price\\n    chipset {\\n      name\\n    }\\n    vendor {\\n      name\\n    }\\n  }\\n}\",\n  \"variables\": {\n    \"input\": {\n      \"name\": \"RTX 4090 GraphQL Test\",\n      \"chipsetId\": \"{{chipsetId}}\",\n      \"vendorId\": \"{{vendorId}}\",\n      \"memoryGB\": 24,\n      \"memoryType\": \"GDDR6X\",\n      \"tdp\": 450,\n      \"price\": 1599.99,\n      \"status\": \"AVAILABLE\",\n      \"description\": \"High-end GPU created via GraphQL\",\n      \"tagIds\": [\"{{tagId1}}\", \"{{tagId2}}\"]\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": ["{{baseUrl}}"],
+              "path": ["graphql"]
+            },
+            "description": "GraphQL mutation to create a new GPU (Admin only). Requires authentication token."
+          }
+        },
+        {
+          "name": "Update GPU Mutation",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response has data field\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('data');",
+                  "});",
+                  "",
+                  "pm.test(\"Response has updateGpu object\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.data).to.have.property('updateGpu');",
+                  "});",
+                  "",
+                  "pm.test(\"Updated GPU has required fields\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    if (jsonData.data && jsonData.data.updateGpu) {",
+                  "        var gpu = jsonData.data.updateGpu;",
+                  "        pm.expect(gpu).to.have.property('id');",
+                  "        pm.expect(gpu).to.have.property('price');",
+                  "    }",
+                  "});",
+                  "",
+                  "pm.test(\"Response time is less than 1000ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(1000);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"mutation UpdateGpu($id: ID!, $input: UpdateGpuInput!) {\\n  updateGpu(id: $id, input: $input) {\\n    id\\n    name\\n    price\\n    status\\n  }\\n}\",\n  \"variables\": {\n    \"id\": \"{{gpuId}}\",\n    \"input\": {\n      \"price\": 1499.99\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": ["{{baseUrl}}"],
+              "path": ["graphql"]
+            },
+            "description": "GraphQL mutation to update an existing GPU (Admin only). All fields are optional."
+          }
+        },
+        {
+          "name": "Delete GPU Mutation",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response has data field\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('data');",
+                  "});",
+                  "",
+                  "pm.test(\"Response has deleteGpu boolean\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.data).to.have.property('deleteGpu');",
+                  "    pm.expect(jsonData.data.deleteGpu).to.be.true;",
+                  "});",
+                  "",
+                  "pm.test(\"Response time is less than 500ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(500);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"mutation DeleteGpu($id: ID!) {\\n  deleteGpu(id: $id)\n}\",\n  \"variables\": {\n    \"id\": \"{{gpuId}}\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": ["{{baseUrl}}"],
+              "path": ["graphql"]
+            },
+            "description": "GraphQL mutation to delete a GPU (Admin only)."
+          }
+        },
+        {
+          "name": "Toggle GPU Status Mutation",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response has data field\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('data');",
+                  "});",
+                  "",
+                  "pm.test(\"Response has toggleGpuStatus object\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.data).to.have.property('toggleGpuStatus');",
+                  "});",
+                  "",
+                  "pm.test(\"Status is valid enum value\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    if (jsonData.data && jsonData.data.toggleGpuStatus) {",
+                  "        var gpu = jsonData.data.toggleGpuStatus;",
+                  "        pm.expect(gpu).to.have.property('status');",
+                  "        pm.expect(['AVAILABLE', 'DISCONTINUED', 'COMING_SOON']).to.include(gpu.status);",
+                  "    }",
+                  "});",
+                  "",
+                  "pm.test(\"Response time is less than 500ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(500);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"mutation ToggleGpuStatus($id: ID!) {\\n  toggleGpuStatus(id: $id) {\\n    id\\n    status\\n  }\\n}\",\n  \"variables\": {\n    \"id\": \"{{gpuId}}\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": ["{{baseUrl}}"],
+              "path": ["graphql"]
+            },
+            "description": "GraphQL mutation to toggle GPU status (Admin only)."
+          }
+        },
+        {
+          "name": "Get Current User Query",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response has data field\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('data');",
+                  "});",
+                  "",
+                  "pm.test(\"Response has me object\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.data).to.have.property('me');",
+                  "});",
+                  "",
+                  "pm.test(\"User has required fields\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    if (jsonData.data && jsonData.data.me) {",
+                  "        var user = jsonData.data.me;",
+                  "        pm.expect(user).to.have.property('id');",
+                  "        pm.expect(user).to.have.property('email');",
+                  "        pm.expect(user).to.have.property('role');",
+                  "    }",
+                  "});",
+                  "",
+                  "pm.test(\"Response time is less than 500ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(500);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"query Me {\\n  me {\\n    id\\n    email\\n    role\\n    isActive\\n  }\\n}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": ["{{baseUrl}}"],
+              "path": ["graphql"]
+            },
+            "description": "GraphQL query to get current authenticated user information."
+          }
+        }
+      ]
+    }
+  ]
+}
+

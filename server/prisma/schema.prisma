@@ -1,0 +1,95 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Manufacturer {
+  NVIDIA
+  AMD
+  Intel
+}
+
+enum GpuStatus {
+  AVAILABLE
+  DISCONTINUED
+  COMING_SOON
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+model User {
+  id                String   @id @default(uuid())
+  email             String   @unique
+  password          String
+  isActive          Boolean  @default(false)
+  role              UserRole @default(USER)
+  confirmationToken String?  @unique
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@map("users")
+}
+
+model Chipset {
+  id           String       @id @default(uuid())
+  name         String
+  manufacturer Manufacturer
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  gpus Gpu[]
+
+  @@unique([name, manufacturer])
+  @@map("chipsets")
+}
+
+model Vendor {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  gpus Gpu[]
+
+  @@map("vendors")
+}
+
+model Tag {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  gpus Gpu[]
+
+  @@map("tags")
+}
+
+model Gpu {
+  id          String    @id @default(uuid())
+  name        String
+  chipsetId   String
+  vendorId    String
+  memoryGB    Int
+  memoryType  String
+  tdp         Int
+  price       Float
+  status      GpuStatus @default(AVAILABLE)
+  description String?   @db.Text
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  chipset Chipset @relation(fields: [chipsetId], references: [id], onDelete: Cascade)
+  vendor  Vendor  @relation(fields: [vendorId], references: [id], onDelete: Cascade)
+  tags    Tag[]
+
+  @@map("gpus")
+}
+
