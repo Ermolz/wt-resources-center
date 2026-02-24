@@ -2,7 +2,7 @@
 
 ## Quick Start
 
-1. **Create `.env` file in the root directory:**
+1. **Create `.env` file in the `server/` directory:**
 ```env
 # Database
 DB_USER=postgres
@@ -111,7 +111,7 @@ npx prisma studio
 
 ## Environment Variables
 
-### Backend (.env in root)
+### Backend (server/.env)
 
 Required variables:
 - `DATABASE_URL` - PostgreSQL connection string
@@ -156,7 +156,7 @@ docker-compose restart
 
 If port 3000 or 5173 is already in use:
 
-1. Change `PORT` in `.env` file (backend)
+1. Change `PORT` in `server/.env`
 2. Or stop the process using the port
 
 ### Prisma Issues
@@ -179,7 +179,7 @@ npx prisma migrate dev
 
 ### Backend
 
-1. Set `NODE_ENV=production` in `.env`
+1. Set `NODE_ENV=production` in `server/.env`
 2. Build and start:
 ```bash
 cd server

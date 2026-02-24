@@ -126,9 +126,14 @@ Default users (created by seed):
 - Modern, clean interface with smooth animations
 - Real-time updates via Socket.io
 
-## Development
+## CI
 
-See [Setup Guide](docs/SETUP.md) for detailed development instructions.
+On every push and pull request to `master`/`main`, GitHub Actions runs:
+
+- **Client**: install, lint, build
+- **Server**: install, Prisma generate, entry-point check
+
+No deployment; only build and lint verification.
 
 ### Common Commands
 
@@ -204,7 +209,7 @@ server/src/
 ## Tech Stack Details
 
 ### Backend
-- **Runtime**: Node.js 18+
+- **Runtime**: Node.js 20+ (see [.nvmrc](.nvmrc))
 - **Framework**: Express.js
 - **Database**: PostgreSQL 15
 - **ORM**: Prisma
