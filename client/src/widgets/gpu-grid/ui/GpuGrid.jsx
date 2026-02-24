@@ -64,46 +64,46 @@ export const GpuGrid = ({ filters }) => {
 
   if (loading) {
     return (
-      <div className="text-center py-12">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 dark:border-blue-400 mx-auto"></div>
-        <p className="mt-4 text-gray-600 dark:text-gray-400">Loading GPUs...</p>
+      <div className="flex flex-col items-center justify-center py-16 sm:py-24">
+        <div className="animate-spin rounded-full h-12 w-12 border-2 border-primary-200 dark:border-primary-700 border-t-primary-600 dark:border-t-primary-400" />
+        <p className="mt-4 text-sm font-medium text-gray-500 dark:text-gray-400">Loading GPUs...</p>
       </div>
     );
   }
 
   if (gpus.length === 0) {
     return (
-      <div className="text-center py-12">
-        <div className="text-6xl mb-4">🔍</div>
-        <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">No GPUs found</h3>
-        <p className="text-gray-600 dark:text-gray-400">Try adjusting your filters</p>
+      <div className="text-center py-16 sm:py-24 rounded-xl bg-gray-100/50 dark:bg-gray-800/30 border border-dashed border-gray-300 dark:border-gray-600">
+        <span className="text-5xl sm:text-6xl opacity-60">🔍</span>
+        <h3 className="mt-4 text-lg font-semibold text-gray-900 dark:text-white">No GPUs found</h3>
+        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">Try adjusting your filters</p>
       </div>
     );
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mt-4 sm:mt-8">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 mt-6 sm:mt-8">
       {gpus.map((gpu) => (
         <Card
           key={gpu.id}
-          className="cursor-pointer hover:shadow-lg transition-shadow"
+          className="cursor-pointer hover:shadow-card-hover transition-all duration-250 hover:-translate-y-0.5"
           onClick={() => navigate(`/gpu/${gpu.id}`)}
         >
-          <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white">{gpu.name}</h3>
-          <div className="space-y-1 text-sm text-gray-600 dark:text-gray-400 mb-4">
-            <p>{gpu.chipset.name} - {gpu.vendor.name}</p>
+          <h3 className="text-lg font-bold mb-2 text-gray-900 dark:text-white line-clamp-2">{gpu.name}</h3>
+          <div className="space-y-1.5 text-sm text-gray-600 dark:text-gray-400 mb-4">
+            <p>{gpu.chipset.name} — {gpu.vendor.name}</p>
             <p>{gpu.memoryGB} GB {gpu.memoryType}</p>
             <p>TDP: {gpu.tdp}W</p>
-            <p className="text-lg font-semibold text-gray-900 dark:text-white">${gpu.price}</p>
+            <p className="text-base font-semibold text-primary-600 dark:text-primary-400 mt-2">${gpu.price}</p>
           </div>
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between pt-2 border-t border-gray-100 dark:border-gray-700/80">
             <span
-              className={`px-2 py-1 rounded-full text-xs font-semibold ${
+              className={`px-2.5 py-1 rounded-lg text-xs font-medium ${
                 gpu.status === 'AVAILABLE'
-                  ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200'
+                  ? 'bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-200'
                   : gpu.status === 'DISCONTINUED'
-                  ? 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200'
-                  : 'bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200'
+                  ? 'bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-200'
+                  : 'bg-amber-100 dark:bg-amber-900/50 text-amber-800 dark:text-amber-200'
               }`}
             >
               {gpu.status}

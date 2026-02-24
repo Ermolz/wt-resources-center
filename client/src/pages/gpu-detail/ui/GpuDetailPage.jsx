@@ -31,7 +31,7 @@ export const GpuDetailPage = () => {
         <Navbar />
         <div className="flex items-center justify-center h-screen">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 dark:border-blue-400 mx-auto"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-2 border-primary-200 dark:border-primary-700 border-t-primary-600 dark:border-t-primary-400" />
             <p className="mt-4 text-gray-600 dark:text-gray-400">Loading...</p>
           </div>
         </div>
@@ -99,7 +99,7 @@ export const GpuDetailPage = () => {
                 {gpu.tags.map((tag) => (
                   <span
                     key={tag.id}
-                    className="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-sm"
+                    className="px-3 py-1 bg-primary-100 dark:bg-primary-900/50 text-primary-800 dark:text-primary-200 rounded-lg text-sm font-medium"
                   >
                     {tag.name}
                   </span>

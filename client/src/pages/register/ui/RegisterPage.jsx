@@ -93,9 +93,9 @@ export const RegisterPage = () => {
             {loading ? 'Registering...' : 'Register'}
           </Button>
         </form>
-        <p className="mt-4 text-center text-sm">
+        <p className="mt-5 text-center text-sm text-gray-600 dark:text-gray-400">
           Already have an account?{' '}
-          <Link to="/login" className="text-blue-600 hover:underline">
+          <Link to="/login" className="font-medium text-primary-600 dark:text-primary-400 hover:underline">
             Login
           </Link>
         </p>

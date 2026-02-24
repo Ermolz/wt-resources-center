@@ -50,10 +50,10 @@ export const LoginPage = () => {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
       <Navbar />
-      <div className="flex items-center justify-center py-6 sm:py-12 px-4">
+      <div className="flex items-center justify-center py-8 sm:py-16 px-4">
         <Card className="w-full max-w-md">
-        <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-gray-900 dark:text-white">Login</h2>
-        <form onSubmit={handleSubmit}>
+        <h2 className="text-xl sm:text-2xl font-bold mb-5 sm:mb-6 text-gray-900 dark:text-white">Login</h2>
+        <form onSubmit={handleSubmit} className="space-y-1">
           <Input
             label="Email"
             type="email"
@@ -75,9 +75,9 @@ export const LoginPage = () => {
             {loading ? 'Logging in...' : 'Login'}
           </Button>
         </form>
-        <p className="mt-4 text-center text-sm">
+        <p className="mt-5 text-center text-sm text-gray-600 dark:text-gray-400">
           Don't have an account?{' '}
-          <Link to="/register" className="text-blue-600 dark:text-blue-400 hover:underline">
+          <Link to="/register" className="font-medium text-primary-600 dark:text-primary-400 hover:underline">
             Register
           </Link>
         </p>

@@ -34,7 +34,7 @@ export const SettingsPage = () => {
         <Navbar />
         <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center transition-colors duration-200">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 dark:border-blue-400 mx-auto"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-2 border-primary-200 dark:border-primary-700 border-t-primary-600 dark:border-t-primary-400" />
             <p className="mt-4 text-gray-600 dark:text-gray-400">Loading...</p>
           </div>
         </div>
@@ -66,7 +66,7 @@ export const SettingsPage = () => {
                 </div>
                 <button
                   onClick={toggleTheme}
-                  className="relative inline-flex h-6 w-11 items-center rounded-full bg-gray-200 dark:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                  className="relative inline-flex h-6 w-11 items-center rounded-full bg-gray-200 dark:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
                   aria-label="Toggle theme"
                 >
                   <span
@@ -81,7 +81,7 @@ export const SettingsPage = () => {
                   onClick={() => theme !== 'light' && toggleTheme()}
                   className={`flex-1 p-3 rounded-lg border-2 transition-all ${
                     theme === 'light'
-                      ? 'border-blue-500 bg-blue-50 dark:bg-gray-800'
+                      ? 'border-primary-500 bg-primary-50 dark:bg-gray-800 dark:border-primary-500'
                       : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
                   }`}
                 >
@@ -96,7 +96,7 @@ export const SettingsPage = () => {
                   onClick={() => theme !== 'dark' && toggleTheme()}
                   className={`flex-1 p-3 rounded-lg border-2 transition-all ${
                     theme === 'dark'
-                      ? 'border-blue-500 bg-blue-50 dark:bg-gray-800'
+                      ? 'border-primary-500 bg-primary-50 dark:bg-gray-800 dark:border-primary-500'
                       : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
                   }`}
                 >
@@ -129,12 +129,12 @@ export const SettingsPage = () => {
                   onClick={() => changeLanguage('en')}
                   className={`flex-1 p-3 rounded-lg border-2 transition-all ${
                     language === 'en'
-                      ? 'border-blue-500 bg-blue-50 dark:bg-gray-800'
+                      ? 'border-primary-500 bg-primary-50 dark:bg-gray-800 dark:border-primary-500'
                       : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
                   }`}
                 >
                   <div className="flex items-center justify-center space-x-2">
-                    <svg className="w-5 h-5 text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg className="w-5 h-5 text-primary-600 dark:text-primary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     <span className="text-sm font-medium text-gray-900 dark:text-white">English</span>
@@ -144,12 +144,12 @@ export const SettingsPage = () => {
                   onClick={() => changeLanguage('uk')}
                   className={`flex-1 p-3 rounded-lg border-2 transition-all ${
                     language === 'uk'
-                      ? 'border-blue-500 bg-blue-50 dark:bg-gray-800'
+                      ? 'border-primary-500 bg-primary-50 dark:bg-gray-800 dark:border-primary-500'
                       : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
                   }`}
                 >
                   <div className="flex items-center justify-center space-x-2">
-                    <svg className="w-5 h-5 text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg className="w-5 h-5 text-primary-600 dark:text-primary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     <span className="text-sm font-medium text-gray-900 dark:text-white">Українська</span>
@@ -180,12 +180,12 @@ export const SettingsPage = () => {
                   }}
                   className={`flex-1 p-3 rounded-lg border-2 transition-all ${
                     apiType === 'rest'
-                      ? 'border-blue-500 bg-blue-50 dark:bg-gray-800'
+                      ? 'border-primary-500 bg-primary-50 dark:bg-gray-800 dark:border-primary-500'
                       : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
                   }`}
                 >
                   <div className="flex items-center justify-center space-x-2">
-                    <svg className="w-5 h-5 text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg className="w-5 h-5 text-primary-600 dark:text-primary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
                     <span className="text-sm font-medium text-gray-900 dark:text-white">{t('rest')}</span>
@@ -198,7 +198,7 @@ export const SettingsPage = () => {
                   }}
                   className={`flex-1 p-3 rounded-lg border-2 transition-all ${
                     apiType === 'graphql'
-                      ? 'border-blue-500 bg-blue-50 dark:bg-gray-800'
+                      ? 'border-primary-500 bg-primary-50 dark:bg-gray-800 dark:border-primary-500'
                       : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
                   }`}
                 >

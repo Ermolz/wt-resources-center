@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Input } from '@shared/ui/Input';
 import { Select } from '@shared/ui/Select';
 import { Card } from '@shared/ui/Card';
+import { Button } from '@shared/ui/Button';
 import { chipsetApi } from '@entities/chipset/api/chipset.api';
 import { vendorApi } from '@entities/vendor/api/vendor.api';
 import { tagApi } from '@entities/tag/api/tag.api';
@@ -47,8 +48,8 @@ export const GpuFilters = ({ filters, onFiltersChange }) => {
   };
 
   return (
-    <Card>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
+    <Card className="mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5">
         <Input
           label="Search"
           placeholder="Search by name..."
@@ -124,13 +125,10 @@ export const GpuFilters = ({ filters, onFiltersChange }) => {
           onChange={(e) => handleChange('maxPrice', e.target.value)}
         />
       </div>
-      <div className="mt-4 flex justify-end">
-        <button
-          onClick={handleReset}
-          className="px-4 py-2 text-sm sm:text-base bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
-        >
+      <div className="mt-5 pt-4 flex justify-end border-t border-gray-100 dark:border-gray-700/80">
+        <Button variant="secondary" onClick={handleReset}>
           Reset Filters
-        </button>
+        </Button>
       </div>
     </Card>
   );
