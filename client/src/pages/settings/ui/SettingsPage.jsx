@@ -6,25 +6,29 @@ import { useTheme } from '@shared/lib/theme';
 import { useI18n } from '@shared/lib/i18n';
 import { useApiType } from '@shared/lib/api-type';
 
+const getInitialUser = () => {
+  try {
+    const data = localStorage.getItem('user');
+    return data ? JSON.parse(data) : null;
+  } catch {
+    return null;
+  }
+};
+
 export const SettingsPage = () => {
   const navigate = useNavigate();
   const { theme, toggleTheme } = useTheme();
   const { language, changeLanguage, t } = useI18n();
   const { apiType, changeApiType } = useApiType();
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [user] = useState(getInitialUser);
 
   useEffect(() => {
-    const userData = localStorage.getItem('user');
-    if (!userData) {
+    if (!user) {
       navigate('/login');
-      return;
     }
-    setUser(JSON.parse(userData));
-    setLoading(false);
-  }, [navigate]);
+  }, [user, navigate]);
 
-  if (loading) {
+  if (!user) {
     return (
       <>
         <Navbar />

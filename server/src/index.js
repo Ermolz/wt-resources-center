@@ -47,8 +47,8 @@ const apolloServer = new ApolloServer({
       try {
         const user = jwt.verify(token, secret);
         context.user = user;
-      } catch (error) {
-        // Invalid token, continue without user
+      } catch {
+        void 0;
       }
     }
     return context;
@@ -64,9 +64,9 @@ app.use('/api/tags', tagRoutes);
 app.use(errorHandler);
 
 io.on('connection', (socket) => {
-  console.log('Client connected:', socket.id);
+  console.warn('Client connected:', socket.id);
   socket.on('disconnect', () => {
-    console.log('Client disconnected:', socket.id);
+    console.warn('Client disconnected:', socket.id);
   });
 });
 
@@ -76,8 +76,8 @@ const startServer = async () => {
 
   const PORT = process.env.PORT || 3000;
   httpServer.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-    console.log(`GraphQL endpoint: http://localhost:${PORT}/graphql`);
+    console.warn(`Server running on http://localhost:${PORT}`);
+    console.warn(`GraphQL endpoint: http://localhost:${PORT}/graphql`);
   });
 };
 

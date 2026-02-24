@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { Card } from '@shared/ui/Card';
 import { Button } from '@shared/ui/Button';
 import { Navbar } from '@shared/ui/Navbar';
@@ -7,7 +7,6 @@ import { authApi } from '@features/auth/api/auth.api';
 
 export const ConfirmPage = () => {
   const { token } = useParams();
-  const navigate = useNavigate();
   const [status, setStatus] = useState('loading');
 
   useEffect(() => {
@@ -15,7 +14,7 @@ export const ConfirmPage = () => {
       try {
         await authApi.confirm(token);
         setStatus('success');
-      } catch (error) {
+      } catch {
         setStatus('error');
       }
     };

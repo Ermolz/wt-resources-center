@@ -34,6 +34,8 @@ const errorLink = onError(({ graphQLErrors, networkError, operation, forward }) 
       window.location.href = '/login';
     }
   }
+
+  return forward(operation);
 });
 
 export const apolloClient = new ApolloClient({

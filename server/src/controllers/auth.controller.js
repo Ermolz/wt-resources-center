@@ -1,5 +1,5 @@
 const authService = require('../services/auth.service');
-const { sendSuccess, sendError } = require('../utils/response');
+const { sendSuccess } = require('../utils/response');
 
 const register = async (req, res, next) => {
   try {

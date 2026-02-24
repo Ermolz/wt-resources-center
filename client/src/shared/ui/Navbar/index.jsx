@@ -1,22 +1,24 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Button } from '../Button';
 import { useTheme } from '@shared/lib/theme';
 import { useI18n } from '@shared/lib/i18n';
+
+const getInitialUser = () => {
+  try {
+    const data = localStorage.getItem('user');
+    return data ? JSON.parse(data) : null;
+  } catch {
+    return null;
+  }
+};
 
 export const Navbar = () => {
   const navigate = useNavigate();
   const { theme, toggleTheme } = useTheme();
   const { t } = useI18n();
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(getInitialUser);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  useEffect(() => {
-    const userData = localStorage.getItem('user');
-    if (userData) {
-      setUser(JSON.parse(userData));
-    }
-  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem('token');

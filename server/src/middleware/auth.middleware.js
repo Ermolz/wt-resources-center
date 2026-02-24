@@ -22,7 +22,7 @@ const authenticate = async (req, res, next) => {
 
     req.user = user;
     next();
-  } catch (error) {
+  } catch {
     return sendError(res, 'INVALID_TOKEN', 'Invalid token', null, 401);
   }
 };

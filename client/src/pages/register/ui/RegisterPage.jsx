@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Input } from '@shared/ui/Input';
 import { Button } from '@shared/ui/Button';
 import { Card } from '@shared/ui/Card';
@@ -13,7 +13,6 @@ const registerSchema = z.object({
 });
 
 export const RegisterPage = () => {
-  const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);

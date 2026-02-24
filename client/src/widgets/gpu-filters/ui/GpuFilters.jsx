@@ -10,15 +10,7 @@ export const GpuFilters = ({ filters, onFiltersChange }) => {
   const [localFilters, setLocalFilters] = useState(filters);
   const [chipsets, setChipsets] = useState([]);
   const [vendors, setVendors] = useState([]);
-  const [tags, setTags] = useState([]);
-
-  useEffect(() => {
-    loadOptions();
-  }, []);
-
-  useEffect(() => {
-    onFiltersChange(localFilters);
-  }, [localFilters, onFiltersChange]);
+  const [_tags, setTags] = useState([]);
 
   const loadOptions = async () => {
     try {
@@ -34,6 +26,14 @@ export const GpuFilters = ({ filters, onFiltersChange }) => {
       console.error('Failed to load filter options:', error);
     }
   };
+
+  useEffect(() => {
+    queueMicrotask(() => loadOptions());
+  }, []);
+
+  useEffect(() => {
+    onFiltersChange(localFilters);
+  }, [localFilters, onFiltersChange]);
 
   const handleChange = (field, value) => {
     setLocalFilters((prev) => ({

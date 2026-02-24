@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { gpuApi } from '@entities/gpu/api/gpu.api';
 import { Card } from '@shared/ui/Card';
@@ -10,9 +10,21 @@ export const GpuGrid = ({ filters }) => {
   const [gpus, setGpus] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const loadGpus = useCallback(async () => {
+    setLoading(true);
+    try {
+      const response = await gpuApi.getAll(filters);
+      setGpus(response.data);
+    } catch (error) {
+      console.error('Failed to load GPUs:', error);
+    } finally {
+      setLoading(false);
+    }
+  }, [filters]);
+
   useEffect(() => {
     loadGpus();
-  }, [filters]);
+  }, [loadGpus]);
 
   useEffect(() => {
     if (!socket) return;
@@ -49,18 +61,6 @@ export const GpuGrid = ({ filters }) => {
       socket.off('gpu:status-changed', handleStatusChanged);
     };
   }, [socket]);
-
-  const loadGpus = async () => {
-    setLoading(true);
-    try {
-      const response = await gpuApi.getAll(filters);
-      setGpus(response.data);
-    } catch (error) {
-      console.error('Failed to load GPUs:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   if (loading) {
     return (

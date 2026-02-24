@@ -5,11 +5,11 @@ const isDevelopment = process.env.NODE_ENV === 'development';
 const transporter = isDevelopment
   ? {
       sendMail: async (options) => {
-        console.log('=== EMAIL (MOCK MODE) ===');
-        console.log('To:', options.to);
-        console.log('Subject:', options.subject);
-        console.log('HTML:', options.html);
-        console.log('========================');
+        console.warn('=== EMAIL (MOCK MODE) ===');
+        console.warn('To:', options.to);
+        console.warn('Subject:', options.subject);
+        console.warn('HTML:', options.html);
+        console.warn('========================');
         return { messageId: 'mock-message-id' };
       },
     }

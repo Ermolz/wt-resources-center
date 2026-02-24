@@ -14,7 +14,7 @@ export const SocketProvider = ({ children }) => {
       }
     );
 
-    setSocket(socketInstance);
+    queueMicrotask(() => setSocket(socketInstance));
 
     return () => {
       socketInstance.disconnect();

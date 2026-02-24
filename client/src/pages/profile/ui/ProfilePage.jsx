@@ -5,21 +5,25 @@ import { Button } from '@shared/ui/Button';
 import { Navbar } from '@shared/ui/Navbar';
 import { useI18n } from '@shared/lib/i18n';
 
+const getInitialUser = () => {
+  try {
+    const data = localStorage.getItem('user');
+    return data ? JSON.parse(data) : null;
+  } catch {
+    return null;
+  }
+};
+
 export const ProfilePage = () => {
   const navigate = useNavigate();
   const { t } = useI18n();
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [user] = useState(getInitialUser);
 
   useEffect(() => {
-    const userData = localStorage.getItem('user');
-    if (!userData) {
+    if (!user) {
       navigate('/login');
-      return;
     }
-    setUser(JSON.parse(userData));
-    setLoading(false);
-  }, [navigate]);
+  }, [user, navigate]);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -28,7 +32,7 @@ export const ProfilePage = () => {
     window.location.reload();
   };
 
-  if (loading) {
+  if (!user) {
     return (
       <>
         <Navbar />
@@ -40,10 +44,6 @@ export const ProfilePage = () => {
         </div>
       </>
     );
-  }
-
-  if (!user) {
-    return null;
   }
 
   return (
